@@ -1,3 +1,6 @@
+import { config } from "dotenv";
+config();
+
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -20,12 +23,8 @@ app.post("/decks", async (req: Request, res: Response) => {
   res.json(createdDeck);
 });
 
-mongoose
-  .connect(
-    "mongodb+srv://devbykendrick:hYw6LWxt1PKjZV8H@cluster0.xpnbm3w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  )
-  .then(() => {
-    app.listen(port, () => {
-      console.log("Server Started");
-    });
+mongoose.connect(process.env.MONGO_URL!).then(() => {
+  app.listen(port, () => {
+    console.log("Server Started");
   });
+});
