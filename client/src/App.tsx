@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./App.css";
 import { deleteDeck } from "./api/deleteDeck";
 import { getDecks, TDeckProps } from "./api/getDecks";
 import { createDeck } from "./api/createDeck";
+import { updateDeck } from "./api/updateDeck";
+import "./App.css";
 
 function App() {
   const [decks, setDecks] = useState<TDeckProps[]>([]);
   const [title, setTitle] = useState("");
+
+  async function handleUpdate(deckId: string) {
+    try {
+      const updatedDeck = await updateDeck(deckId); // Pass new title
+      setDecks(decks.map((deck) => (deck._id === deckId ? updatedDeck : deck)));
+    } catch (error) {
+      console.error("Error updating deck:", error);
+    }
+  }
 
   async function handleCreateDeck(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +47,9 @@ function App() {
             <li key={deck._id}>
               <button onClick={() => handleDeleteDeck(deck._id)}>X</button>
               {deck.title}
+              <button onClick={() => handleUpdate(deck._id)}>
+                Update User
+              </button>
               <Link to={`decks/${deck._id}`}>Decks</Link>
             </li>
           ))}
