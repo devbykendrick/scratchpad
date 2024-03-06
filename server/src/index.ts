@@ -3,16 +3,22 @@ config();
 
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
-
+import cors from "cors";
 import Deck from "./models/Deck";
 
 const port = 8000;
 const app = express();
 
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send({ users: ["userOne", "userTwo", "userThree"] });
+app.get("/decks", async (req: Request, res: Response) => {
+  const decks = await Deck.find();
+  res.json(decks);
 });
 
 app.post("/decks", async (req: Request, res: Response) => {
