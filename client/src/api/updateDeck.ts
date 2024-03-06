@@ -1,13 +1,13 @@
 import { API_URL } from "./config";
 
-export async function updateDeck(deckId: string) {
+export async function updateDeck(deckId: string, newTitle: string) {
   try {
     const response = await fetch(`${API_URL}/decks/${deckId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title: "YOYO" }),
+      body: JSON.stringify({ title: newTitle }),
     });
 
     if (response.ok) {
