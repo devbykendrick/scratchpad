@@ -4,15 +4,21 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Deck from "./Deck.tsx";
+import QuickNotesView from "./components/Views/QuickNotesView.tsx";
+import HomeView from "./components/Views/HomeView.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <HomeView />,
   },
   {
     path: "/decks/:deckId",
     element: <Deck />,
+  },
+  {
+    path: "/quick-notes",
+    element: <QuickNotesView />,
   },
 ]);
 
