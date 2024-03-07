@@ -3,6 +3,7 @@ import { API_URL } from "./config";
 export interface TDeckProps {
   title: string;
   _id: string;
+  createdAt: string;
 }
 
 export async function getDecks(): Promise<TDeckProps[]> {

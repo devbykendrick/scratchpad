@@ -1,7 +1,6 @@
 import { config } from "dotenv";
 config();
 
-import { OAuth2Client, UserRefreshClient } from "google-auth-library";
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -47,11 +46,7 @@ app.put("/decks/:deckId", async (req: Request, res: Response) => {
 app.delete("/decks/:deckId", deleteDeckController);
 
 // GOOGLE CALENDAR API
-
 const { google } = require("googleapis");
-
-const clientId = process.env.GOOGLE_CLIENT_ID;
-const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
 const oAuth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -60,7 +55,7 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 
 app.post("/auth/google", async (req: Request, res: Response) => {
-  const { tokens } = await oAuth2Client.getToken(req.body.code); // exchange code for tokens
+  const { tokens } = await oAuth2Client.getToken(req.body.code);
   res.json(tokens);
 });
 

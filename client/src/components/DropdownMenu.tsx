@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface DropdownMenuProps {
   onUpdateClick: () => void;
   onDeleteClick: () => void;
 }
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({
-  onUpdateClick,
-  onDeleteClick,
-}) => {
+function DropdownMenu({ onUpdateClick, onDeleteClick }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -25,24 +22,37 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     setIsOpen(false);
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const clickedInsideMenu = (event.target as HTMLElement).closest(".menu");
+      if (!clickedInsideMenu) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="relative">
-      <div className="cursor-pointer" onClick={toggleMenu}>
+      <button
+        onClick={toggleMenu}
+        className="cursor-pointer inline-flex self-center items-center text-sm font-medium text-center"
+      >
         <svg
+          className="w-4 h-4 text-gray-300"
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+          fill="currentColor"
+          viewBox="0 0 4 15"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16m-7 6h7"
-          />
+          <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
         </svg>
-      </div>
+      </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
@@ -63,6 +73,6 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default DropdownMenu;

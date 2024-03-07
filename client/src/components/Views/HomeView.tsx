@@ -14,19 +14,6 @@ function HomeView() {
   const [startDateTime, setStartDateTime] = useState("");
   const [endDateTime, setEndDateTime] = useState("");
 
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: async ({ code }) => {
-  //     const tokens = await axios.post("http://localhost:3001/auth/google", {
-  //       // http://localhost:3001/auth/google backend that will exchange the code
-  //       code,
-  //     });
-
-  //     console.log(tokens);
-  //     setSignedIn(true);
-  //   },
-  //   flow: "auth-code",
-  // });
-
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
       console.log(codeResponse);
@@ -36,7 +23,7 @@ function HomeView() {
   });
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log(summary, description, location, startDateTime, endDateTime);
+
     axios
       .post(`${API_URL}/create-event`, {
         summary,
@@ -115,14 +102,6 @@ function HomeView() {
         </form>
       ) : (
         <button onClick={() => login()}>Sign in with Google 🚀</button>
-        // <GoogleLogin
-        //   onSuccess={(credentialResponse) => {
-        //     console.log(credentialResponse);
-        //   }}
-        //   onError={() => {
-        //     console.log("Login Failed");
-        //   }}
-        // />
       )}
     </main>
   );
