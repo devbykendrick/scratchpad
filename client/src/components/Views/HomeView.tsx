@@ -1,7 +1,56 @@
+// import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import { useState } from "react";
+import { API_URL } from "../../api/config";
 
 function HomeView() {
+  const [signedIn, setSignedIn] = useState(false);
+  const [summary, setSummary] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
+
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async ({ code }) => {
+  //     const tokens = await axios.post("http://localhost:3001/auth/google", {
+  //       // http://localhost:3001/auth/google backend that will exchange the code
+  //       code,
+  //     });
+
+  //     console.log(tokens);
+  //     setSignedIn(true);
+  //   },
+  //   flow: "auth-code",
+  // });
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      console.log(codeResponse);
+      setSignedIn(true);
+    },
+    flow: "auth-code",
+  });
+  function handleSubmit(e) {
+    e.preventDefault();
+    // console.log(summary, description, location, startDateTime, endDateTime);
+    axios
+      .post(`${API_URL}/create-event`, {
+        summary,
+        description,
+        location,
+        startDateTime,
+        endDateTime,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setSignedIn(true);
+      })
+      .catch((error) => console.log(error.message));
+  }
   return (
     <main className="relative">
       <Navbar />
@@ -22,6 +71,59 @@ function HomeView() {
           </button>
         </Link>
       </div>
+      {signedIn ? (
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="summary">Summary</label>
+          <input
+            type="text"
+            id="summary"
+            onChange={(e) => setSummary(e.target.value)}
+            value={summary}
+          />
+          <label htmlFor="description">Description</label>
+          <input
+            type="text"
+            id="description"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          />
+          <label htmlFor="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            onChange={(e) => setLocation(e.target.value)}
+            value={location}
+          />
+          <label htmlFor="startDateTime">Start Date Time</label>
+          <input
+            type="datetime-local"
+            id="startDateTime"
+            onChange={(e) => setStartDateTime(e.target.value)}
+            value={startDateTime}
+          />
+          <label htmlFor="endDateTime">End Date Time</label>
+          <input
+            type="datetime-local"
+            id="endDateTime"
+            onChange={(e) => setEndDateTime(e.target.value)}
+            value={endDateTime}
+          />
+          <hr />
+          <button type="submit">Create Calendar Event</button>
+          <p></p>
+          {/* <button onClick={() => signOut()}>Sign Out</button> */}
+        </form>
+      ) : (
+        <button onClick={() => login()}>Sign in with Google 🚀</button>
+        // <GoogleLogin
+        //   onSuccess={(credentialResponse) => {
+        //     console.log(credentialResponse);
+        //   }}
+        //   onError={() => {
+        //     console.log("Login Failed");
+        //   }}
+        // />
+      )}
     </main>
   );
 }
