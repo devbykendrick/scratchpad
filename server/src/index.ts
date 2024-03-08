@@ -48,27 +48,22 @@ app.delete("/decks/:deckId", deleteDeckController);
 // GOOGLE CALENDAR API
 const { google } = require("googleapis");
 
-const oAuth2Client = new google.auth.OAuth2(
+const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
   "postmessage"
 );
 
-app.post("/auth/google", async (req: Request, res: Response) => {
-  const { tokens } = await oAuth2Client.getToken(req.body.code);
-  res.json(tokens);
-});
-
 app.post("/create-event", async (req: Request, res: Response) => {
   try {
     const { summary, description, location, startDateTime, endDateTime } =
       req.body;
-    oAuth2Client.setCredentials({
+    oauth2Client.setCredentials({
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
     const calendar = google.calendar("v3");
     const response = await calendar.events.insert({
-      auth: oAuth2Client,
+      auth: oauth2Client,
       calendarId: "primary",
       requestBody: {
         summary: summary,

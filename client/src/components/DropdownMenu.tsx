@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface DropdownMenuProps {
   onUpdateClick: () => void;
   onDeleteClick: () => void;
+  onCalendarClick: () => void;
 }
 
-function DropdownMenu({ onUpdateClick, onDeleteClick }: DropdownMenuProps) {
+function DropdownMenu({
+  onUpdateClick,
+  onDeleteClick,
+  onCalendarClick,
+}: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleCalendarClick = () => {
+    onCalendarClick();
+    setIsOpen(false);
   };
 
   const handleUpdateClick = () => {
@@ -25,7 +35,9 @@ function DropdownMenu({ onUpdateClick, onDeleteClick }: DropdownMenuProps) {
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const clickedInsideMenu = (event.target as HTMLElement).closest(".menu");
+      const clickedInsideMenu = (event.target as HTMLElement).closest(
+        ".dropdown-menu"
+      );
       if (!clickedInsideMenu) {
         setIsOpen(false);
       }
@@ -35,13 +47,13 @@ function DropdownMenu({ onUpdateClick, onDeleteClick }: DropdownMenuProps) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     <div className="relative">
       <button
         onClick={toggleMenu}
-        className="cursor-pointer inline-flex self-center items-center text-sm font-medium text-center"
+        className="cursor-pointer inline-flex self-center items-center text-sm font-medium text-center focus:bg-[#185FBD] focus:rounded p-2"
       >
         <svg
           className="w-4 h-4 text-gray-300"
@@ -54,16 +66,22 @@ function DropdownMenu({ onUpdateClick, onDeleteClick }: DropdownMenuProps) {
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="absolute -top-14 right-9 w-36 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dropdown-menu z-50">
           <div className="py-1">
             <button
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+              className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+              onClick={handleCalendarClick}
+            >
+              Add to Calendar
+            </button>
+            <button
+              className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
               onClick={handleUpdateClick}
             >
               Edit
             </button>
             <button
-              className="block px-4 py-2 text-sm text-red-700 hover:bg-red-100 hover:text-red-900 w-full text-left"
+              className="block px-4 py-3 text-sm text-red-700 hover:bg-red-100 hover:text-red-900 w-full text-left"
               onClick={handleDeleteClick}
             >
               Delete

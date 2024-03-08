@@ -2,13 +2,23 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import NavbarModal from "./NavbarModal";
 
-function Navbar() {
+interface NavbarProps {
+  signedIn: boolean;
+  setSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  function handleLogout() {
+    setSignedIn(false);
+    localStorage.setItem("signedIn", "false");
+  }
 
   // Define the title based on the current route
   let title = "Scratch Pad";
@@ -26,14 +36,15 @@ function Navbar() {
             {title}
           </Link>
         </div>
-        <div className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="hover:underline">
-            About
-          </Link>
-          <Link to="/quick-notes" className="hover:underline">
-            Quick Notes
-          </Link>
-        </div>
+        {signedIn && (
+          <button
+            className="hidden md:flex items-center space-x-4"
+            onClick={() => handleLogout()}
+          >
+            Logout
+          </button>
+        )}
+
         <div className="md:hidden">
           <button
             className="text-white focus:outline-none"
