@@ -1,6 +1,5 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import NavbarModal from "./NavbarModal";
 
 interface NavbarProps {
   signedIn: boolean;
@@ -8,24 +7,21 @@ interface NavbarProps {
 }
 
 function Navbar({ signedIn, setSignedIn }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   function handleLogout() {
-    setSignedIn(false);
-    localStorage.setItem("signedIn", "false");
+    setShowLogoutModal(true);
   }
 
-  // Define the title based on the current route
-  let title = "Scratch Pad";
-  if (location.pathname === "/quick-notes") {
-    title = "Scratch Pad -> Quick Notes";
-  } else if (location.pathname === "/reminders") {
-    title = "Scratch Pad -> Reminders";
+  function confirmLogout() {
+    setSignedIn(false);
+    localStorage.setItem("signedIn", "false");
+    setShowLogoutModal(false);
+    window.location.reload();
+  }
+
+  function cancelLogout() {
+    setShowLogoutModal(false);
   }
 
   return (
@@ -33,50 +29,54 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <Link to="/" className="text-xl font-bold">
-            {title}
+            Scratch Pad
           </Link>
         </div>
         {signedIn && (
-          <button
-            className="hidden md:flex items-center space-x-4"
-            onClick={() => handleLogout()}
-          >
-            Logout
-          </button>
-        )}
-
-        <div className="md:hidden">
-          <button
-            className="text-white focus:outline-none"
-            onClick={toggleMenu}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <>
+            <button
+              className="flex items-center space-x-4"
+              onClick={() => handleLogout()}
             >
-              {isOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="30"
+                height="30"
+                id="logout"
+              >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
+                  fill="white"
+                  d="M4,12a1,1,0,0,0,1,1h7.59l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l4-4a1,1,0,0,0,.21-.33,1,1,0,0,0,0-.76,1,1,0,0,0-.21-.33l-4-4a1,1,0,1,0-1.42,1.42L12.59,11H5A1,1,0,0,0,4,12ZM17,2H7A3,3,0,0,0,4,5V8A1,1,0,0,0,6,8V5A1,1,0,0,1,7,4H17a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V16a1,1,0,0,0-2,0v3a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V5A3,3,0,0,0,17,2Z"
+                ></path>
+              </svg>
+            </button>
+            {showLogoutModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+                <div className="bg-white p-8 rounded-lg mx-4">
+                  <p className="text-black text-lg font-semibold">
+                    Are you sure you want to logout of your Google account?
+                  </p>
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded mr-4"
+                      onClick={() => confirmLogout()}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                      onClick={() => cancelLogout()}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
-      <NavbarModal isOpen={isOpen} onClose={toggleMenu} />
     </nav>
   );
 }

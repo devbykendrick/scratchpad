@@ -18,8 +18,7 @@
     "google-auth-library": "^9.6.3",
     "googleapis": "^133.0.0",
     "mongodb": "^6.4.0",
-    "mongoose": "^8.2.1",
-    "rimraf": "^5.0.5"
+    "mongoose": "^8.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

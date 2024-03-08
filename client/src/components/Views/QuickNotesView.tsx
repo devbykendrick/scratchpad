@@ -161,55 +161,93 @@ function QuickNotesView() {
     };
   }, []);
 
+  type GroupedDecks = Record<string, TDeckProps[]>;
+
+  // Assuming 'decks' is an array of Deck objects
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const groupedDecks: GroupedDecks = decks.reduce(
+    (acc: GroupedDecks, deck: TDeckProps) => {
+      const date = new Date(deck.createdAt);
+      const formattedDate = `${days[date.getDay()]}, ${
+        months[date.getMonth()]
+      } ${date.getDate()} ${date.getFullYear()}`;
+      if (!acc[formattedDate]) {
+        acc[formattedDate] = [];
+      }
+      acc[formattedDate].push(deck);
+      return acc;
+    },
+    {}
+  );
+
   return (
     <>
       <Navbar signedIn={signedIn} setSignedIn={setSignedIn} />
       <main>
-        <div>
-          <div className="px-4 mb-3 fixed top-16 bottom-16 left-0 right-0 overflow-y-auto pt-8">
-            {" "}
-            {/* Position container between Navbar and form */}
-            {decks.map((deck) => (
-              <div
-                key={deck._id}
-                className="flex flex-col w-full leading-1.5 py-4 pl-4 pr-2 border-gray-200 bg-[#217DF7] rounded-s-xl rounded-ee-xl mb-5"
-              >
-                <div className="flex justify-between items-center space-x-2 rtl:space-x-reverse">
-                  <span className="text-sm font-normal text-gray-300">
-                    {new Date(deck.createdAt).toLocaleDateString()}
-                  </span>
-                  <div>
-                    <DropdownMenu
-                      onCalendarClick={() => handleCalendar(deck._id)}
-                      onUpdateClick={() => handleUpdate(deck._id)}
-                      onDeleteClick={() => handleDeleteConfirmation(deck._id)}
-                    />
+        <div className="px-4 my-14 overflow-y-auto">
+          {/* Position container between Navbar and form */}
+          {Object.entries(groupedDecks).map(([date, decks]) => (
+            <div key={date}>
+              <div className="text-gray-400 text-center mt-3 mb-2">{date}</div>
+              {decks.map((deck) => (
+                <div
+                  key={deck._id}
+                  className="flex flex-col w-full leading-1.5 py-4 pl-4 pr-2 border-gray-200 bg-[#217DF7] rounded-s-xl rounded-se-xl mb-4"
+                >
+                  <div className="flex justify-between items-center space-x-2 rtl:space-x-reverse">
+                    <span className="text-sm font-normal text-gray-300">
+                      {new Date(deck.createdAt).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </span>
+                    <div>
+                      <DropdownMenu
+                        onCalendarClick={() => handleCalendar(deck._id)}
+                        onUpdateClick={() => handleUpdate(deck._id)}
+                        onDeleteClick={() => handleDeleteConfirmation(deck._id)}
+                      />
+                    </div>
                   </div>
+                  <p className="font-normal py-2.5 text-white">{deck.title}</p>
                 </div>
-                <p className="font-normal py-2.5 text-gray-900 dark:text-white">
-                  {deck.title}
-                </p>
-              </div>
-            ))}
-            <div ref={chatEndRef}></div> {/* Scroll target */}
-          </div>
-          <form
-            onSubmit={handleCreateDeck}
-            className="flex fixed bottom-0 left-0 right-0 p-4 border-t bg-[#242424] border-gray-300"
-          >
-            <input
-              id="deck-title"
-              className="border-2 border-gray-300 rounded-lg py-2 px-4 mr-2 w-full focus:outline-none focus:border-blue-500"
-              value={title}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setTitle(e.target.value);
-              }}
-            />
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-              Send
-            </button>
-          </form>
+              ))}
+            </div>
+          ))}
         </div>
+        <form
+          onSubmit={handleCreateDeck}
+          className="flex fixed bottom-0 left-0 right-0 bg-black bg-opacity-60 backdrop-blur-sm p-3"
+        >
+          <input
+            id="deck-title"
+            className="bg-black bg-opacity-20 backdrop-blur-sm border border-gray-600 rounded-full py-2 px-4 mr-2 w-full focus:outline-none text-white h-10"
+            value={title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setTitle(e.target.value);
+            }}
+          />
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Send
+          </button>
+        </form>
+        <div ref={chatEndRef}></div> {/* Scroll target */}
         {showUpdateModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 px-4">
             <div className="bg-[#242424] rounded-lg p-8 w-full menu">
@@ -400,7 +438,7 @@ function QuickNotesView() {
                           className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
                           onClick={() => handleDeleteDeck()}
                         >
-                          Yes
+                          Remove
                         </button>
                         <button
                           onClick={() => {
@@ -409,7 +447,7 @@ function QuickNotesView() {
                           }}
                           className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
                         >
-                          Close
+                          Keep Message
                         </button>
                       </div>
                     </div>

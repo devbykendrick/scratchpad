@@ -14,16 +14,6 @@ function HomeView() {
             Quick Notes
           </button>
         </Link>
-        <Link to="/">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded mb-4">
-            Reminders
-          </button>
-        </Link>
-        <Link to="/">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded">
-            Blank Canvas
-          </button>
-        </Link>
       </div>
     </main>
   );
