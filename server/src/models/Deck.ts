@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const DeckSchema = new Schema(
   {
     title: String,
+    color: String,
+    header: String,
   },
   { timestamps: true }
 );

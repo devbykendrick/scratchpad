@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface NavbarProps {
   signedIn: boolean;
@@ -23,6 +23,20 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   function cancelLogout() {
     setShowLogoutModal(false);
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const clickedInsideMenu = (event.target as HTMLElement).closest(".menu");
+      if (!clickedInsideMenu) {
+        setShowLogoutModal(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-gray-800 text-white p-4 fixed top-0 w-full z-50">
@@ -53,8 +67,8 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
             </button>
             {showLogoutModal && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
-                <div className="bg-white p-8 rounded-lg mx-4">
-                  <p className="text-black text-lg font-semibold">
+                <div className="bg-black text-white p-8 rounded-lg mx-4 menu">
+                  <p className="text-lg font-semibold">
                     Are you sure you want to logout of your Google account?
                   </p>
                   <div className="mt-4 flex justify-end">
@@ -62,7 +76,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
                       className="bg-red-500 text-white px-4 py-2 rounded mr-4"
                       onClick={() => confirmLogout()}
                     >
-                      Yes
+                      Logout
                     </button>
                     <button
                       className="bg-gray-300 text-gray-800 px-4 py-2 rounded"

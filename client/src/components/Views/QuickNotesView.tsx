@@ -12,6 +12,7 @@ import Navbar from "../Navbar/Navbar";
 function QuickNotesView() {
   const [decks, setDecks] = useState<TDeckProps[]>([]);
   const [title, setTitle] = useState("");
+  const [buttonClicked, setButtonClicked] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,6 +47,41 @@ function QuickNotesView() {
     },
     flow: "auth-code",
   });
+
+  type GroupedDecks = Record<string, TDeckProps[]>;
+
+  // Assuming 'decks' is an array of Deck objects
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const groupedDecks: GroupedDecks = decks.reduce(
+    (acc: GroupedDecks, deck: TDeckProps) => {
+      const date = new Date(deck.createdAt);
+      const formattedDate = `${days[date.getDay()]}, ${
+        months[date.getMonth()]
+      } ${date.getDate()} ${date.getFullYear()}`;
+      if (!acc[formattedDate]) {
+        acc[formattedDate] = [];
+      }
+      acc[formattedDate].push(deck);
+      return acc;
+    },
+    {}
+  );
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -91,12 +127,44 @@ function QuickNotesView() {
     setShowUpdateModal(true);
   }
 
-  async function handleCreateDeck(e: React.FormEvent) {
+  // async function handleCreateDeck(e: React.FormEvent) {
+  //   e.preventDefault();
+  //   const deck = await createDeck(title);
+  //   setDecks([...decks, deck]);
+  //   setTitle("");
+
+  //   if (buttonClicked) {
+  //     setButtonClicked(true);
+  //   }
+  // }
+
+  const handleCreateDeck = async (e: React.FormEvent) => {
     e.preventDefault();
-    const deck = await createDeck(title);
-    setDecks([...decks, deck]);
-    setTitle("");
-  }
+    try {
+      const deckTitle = title.trim();
+      if (deckTitle === "") return;
+      const createdDeck = await createDeck(
+        deckTitle,
+        buttonClicked
+          ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+          : "bg-[#217DF7]",
+        buttonClicked ? "TASK" : "NOTES"
+      ); // Pass color to createDeck
+      const newDeck: TDeckProps = {
+        title: createdDeck.title,
+        _id: createdDeck._id,
+        createdAt: createdDeck.createdAt,
+        color: buttonClicked
+          ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+          : "bg-[#217DF7]", // Set color based on button clicked
+        header: buttonClicked ? "TASK" : "NOTES",
+      };
+      setDecks([...decks, newDeck]);
+      setTitle("");
+    } catch (error) {
+      console.error("Error creating deck:", error);
+    }
+  };
 
   async function handleDeleteConfirmation(deckId: string) {
     setDeckIdToDelete(deckId);
@@ -161,57 +229,40 @@ function QuickNotesView() {
     };
   }, []);
 
-  type GroupedDecks = Record<string, TDeckProps[]>;
-
-  // Assuming 'decks' is an array of Deck objects
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  const groupedDecks: GroupedDecks = decks.reduce(
-    (acc: GroupedDecks, deck: TDeckProps) => {
-      const date = new Date(deck.createdAt);
-      const formattedDate = `${days[date.getDay()]}, ${
-        months[date.getMonth()]
-      } ${date.getDate()} ${date.getFullYear()}`;
-      if (!acc[formattedDate]) {
-        acc[formattedDate] = [];
+  useEffect(() => {
+    if (showUpdateModal && deckIdToUpdate) {
+      const deckToUpdate = decks.find((deck) => deck._id === deckIdToUpdate);
+      if (deckToUpdate) {
+        setNewTitle(deckToUpdate.title);
       }
-      acc[formattedDate].push(deck);
-      return acc;
-    },
-    {}
-  );
+    }
+  }, [showUpdateModal, deckIdToUpdate, decks]);
+
+  useEffect(() => {
+    if (showCalendarModal && deckIdToUpdate) {
+      const deckToUpdate = decks.find((deck) => deck._id === deckIdToUpdate);
+      if (deckToUpdate) {
+        setDescription(deckToUpdate.title);
+      }
+    }
+  }, [showCalendarModal, deckIdToUpdate, decks]);
 
   return (
     <>
       <Navbar signedIn={signedIn} setSignedIn={setSignedIn} />
       <main>
         <div className="px-4 my-14 overflow-y-auto">
-          {/* Position container between Navbar and form */}
           {Object.entries(groupedDecks).map(([date, decks]) => (
             <div key={date}>
               <div className="text-gray-400 text-center mt-3 mb-2">{date}</div>
               {decks.map((deck) => (
                 <div
                   key={deck._id}
-                  className="flex flex-col w-full leading-1.5 py-4 pl-4 pr-2 border-gray-200 bg-[#217DF7] rounded-s-xl rounded-se-xl mb-4"
+                  className={`${deck.color} flex flex-col w-full leading-1.5 py-4 pl-4 pr-2 border-gray-200 rounded-s-xl rounded-se-xl mb-5`}
                 >
                   <div className="flex justify-between items-center space-x-2 rtl:space-x-reverse">
-                    <span className="text-sm font-normal text-gray-300">
+                    <span className="text-xs font-bold text-gray-300">
+                      {deck.header} <span> - </span>
                       {new Date(deck.createdAt).toLocaleTimeString("en-US", {
                         hour: "numeric",
                         minute: "numeric",
@@ -233,29 +284,70 @@ function QuickNotesView() {
         </div>
         <form
           onSubmit={handleCreateDeck}
-          className="flex fixed bottom-0 left-0 right-0 bg-black bg-opacity-60 backdrop-blur-sm p-3"
+          className="flex fixed bottom-0 left-0 right-0 bg-black bg-opacity-70 backdrop-blur-md p-3"
         >
+          <button
+            onClick={() => {
+              setButtonClicked(true);
+            }}
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-2 rounded-full mr-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 46.99 48.49"
+              width="24"
+              height="24"
+              id="task"
+            >
+              <path
+                fill="white"
+                d="M44.14 6.91h-2.88v3.86a1.5 1.5 0 0 1-3 0V6.91H25v3.86a1.5 1.5 0 0 1-3 0V6.91H8.77v3.86a1.5 1.5 0 0 1-3 0V6.91H2.85A2.85 2.85 0 0 0 0 9.76v35.86a2.86 2.86 0 0 0 2.85 2.85h41.29a2.85 2.85 0 0 0 2.85-2.85V9.78a2.84 2.84 0 0 0-2.85-2.87Zm-7.52 13.91L20.76 36.7a1.49 1.49 0 0 1-1.06.44 1.51 1.51 0 0 1-1.06-.44l-8.27-8.27a1.503 1.503 0 0 1 2.13-2.12l7.2 7.2 14.8-14.79a1.5 1.5 0 0 1 2.12 2.12Z"
+              ></path>
+              <path
+                fill="white"
+                d="M8.77 1.5v5.41h-3V1.48a1.5 1.5 0 1 1 3 0zM25 1.5v5.41h-3V1.48a1.5 1.5 0 1 1 3 0zm16.26 0v5.41h-3V1.48a1.5 1.5 0 1 1 3 0z"
+              ></path>
+            </svg>
+          </button>
           <input
             id="deck-title"
-            className="bg-black bg-opacity-20 backdrop-blur-sm border border-gray-600 rounded-full py-2 px-4 mr-2 w-full focus:outline-none text-white h-10"
+            className="bg-black bg-opacity-0 backdrop-blur-sm border border-gray-600 rounded-full py-2 px-4 w-full focus:outline-none text-white h-10"
             value={title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setTitle(e.target.value);
             }}
+            required
           />
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-            Send
+          <button
+            onClick={() => {
+              setButtonClicked(false);
+            }}
+            className="bg-[#217DF7] rounded-full absolute inset-y-0 px-1 right-4 mt-4 h-8"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 512 512"
+              id="up-arrow"
+            >
+              <path
+                fill="white"
+                d="M128.4 189.3L233.4 89c5.8-6 13.7-9 22.4-9s16.5 3 22.4 9l105.4 100.3c12.5 11.9 12.5 31.3 0 43.2-12.5 11.9-32.7 11.9-45.2 0L288 184.4v217c0 16.9-14.3 30.6-32 30.6s-32-13.7-32-30.6v-217l-50.4 48.2c-12.5 11.9-32.7 11.9-45.2 0-12.5-12-12.5-31.3 0-43.3z"
+              ></path>
+            </svg>
           </button>
         </form>
         <div ref={chatEndRef}></div> {/* Scroll target */}
         {showUpdateModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 px-4">
-            <div className="bg-[#242424] rounded-lg p-8 w-full menu">
+            <div className="bg-black rounded-lg p-8 w-full menu">
               <h2 className="text-2xl font-bold mb-4">Update Message</h2>
               <textarea
-                className="rounded w-full p-2 mb-4"
+                className="bg-black border border-gray-600 rounded w-full p-2 mb-4"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
+                required
               />
               <div className="flex justify-end">
                 <button
@@ -276,7 +368,7 @@ function QuickNotesView() {
         )}
         {showDeleteModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 px-4">
-            <div className="bg-[#242424] w-full rounded-lg p-8 menu">
+            <div className="bg-black w-full rounded-lg p-8 menu">
               <h2 className="text-2xl font-bold mb-4">Confirm Deletion</h2>
               <p className="mb-5">Are you sure you want to remove this item?</p>
               <div className="flex justify-end">
@@ -284,7 +376,7 @@ function QuickNotesView() {
                   className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
                   onClick={() => handleDeleteDeck()}
                 >
-                  Yes
+                  Remove
                 </button>
                 <button
                   className="bg-gray-300 text-gray-800 px-4 py-2 rounded"
@@ -298,7 +390,7 @@ function QuickNotesView() {
         )}
         {showCalendarModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50 px-4">
-            <div className="rounded-lg p-8 bg-[#242424] w-full menu">
+            <div className="rounded-lg p-8 bg-black w-full menu">
               {!apiStatus && !signedIn && (
                 <div className="flex flex-col justify-center">
                   <div className="mb-5 text-center">
@@ -342,25 +434,27 @@ function QuickNotesView() {
                 <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                   <div className="flex flex-col">
                     <label className="font-bold" htmlFor="summary">
-                      Title
+                      Title <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="rounded p-2"
+                      className="bg-black border border-gray-600 rounded p-2"
                       type="text"
                       id="summary"
                       onChange={(e) => setSummary(e.target.value)}
                       value={summary}
+                      required
                     />
                   </div>
                   <div className="flex flex-col">
                     <label className="font-bold" htmlFor="description">
-                      Description
+                      Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
-                      className="rounded p-2"
+                      className="bg-black border border-gray-600 rounded p-2"
                       id="description"
                       onChange={(e) => setDescription(e.target.value)}
                       value={description}
+                      required
                     />
                   </div>
                   <div className="flex flex-col">
@@ -368,7 +462,7 @@ function QuickNotesView() {
                       Location
                     </label>
                     <input
-                      className="rounded p-2"
+                      className="bg-black border border-gray-600 rounded p-2"
                       type="text"
                       id="location"
                       onChange={(e) => setLocation(e.target.value)}
@@ -377,31 +471,33 @@ function QuickNotesView() {
                   </div>
                   <div className="flex flex-col">
                     <label className="font-bold" htmlFor="startDateTime">
-                      Start Date Time
+                      Start Date Time <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="rounded p-2"
+                      className="bg-black border border-gray-600 rounded p-2"
                       type="datetime-local"
                       id="startDateTime"
                       onChange={(e) => setStartDateTime(e.target.value)}
                       value={startDateTime}
+                      required
                     />
                   </div>
                   <div className="flex flex-col">
                     <label className="font-bold" htmlFor="endDateTime">
-                      End Date Time
+                      End Date Time <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="rounded p-2"
+                      className="bg-black border border-gray-600 rounded p-2"
                       type="datetime-local"
                       id="endDateTime"
                       onChange={(e) => setEndDateTime(e.target.value)}
                       value={endDateTime}
+                      required
                     />
                   </div>
 
                   <hr />
-                  <div>
+                  <div className="flex justify-end">
                     <button
                       type="submit"
                       className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"

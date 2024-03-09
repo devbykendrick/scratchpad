@@ -7,8 +7,13 @@
   line-height: 1.5;
   font-weight: 400;
   background-color: #000;
+  color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  color-scheme: dark;
 }
