@@ -66,22 +66,22 @@ function DropdownMenu({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute -top-14 right-9 w-36 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dropdown-menu z-50">
+        <div className="absolute -top-14 right-9 w-36 mt-2 origin-top-right bg-black border border-gray-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dropdown-menu z-50">
           <div className="py-1">
             <button
-              className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+              className="block px-4 py-3 text-sm text-white hover:bg-gray-700 w-full text-left"
               onClick={handleCalendarClick}
             >
               Add to Calendar
             </button>
             <button
-              className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+              className="block px-4 py-3 text-sm text-white hover:bg-gray-700 w-full text-left"
               onClick={handleUpdateClick}
             >
               Edit
             </button>
             <button
-              className="block px-4 py-3 text-sm text-red-700 hover:bg-red-100 hover:text-red-900 w-full text-left"
+              className="block px-4 py-3 text-sm text-red-500 hover:bg-gray-700 w-full text-left"
               onClick={handleDeleteClick}
             >
               Delete

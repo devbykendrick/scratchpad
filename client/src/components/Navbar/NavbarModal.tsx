@@ -33,7 +33,7 @@ function NavbarModal({ isOpen, onClose }: ModalProps) {
                 </li>
                 <li>
                   <Link
-                    to="/quick-notes"
+                    to="/"
                     className="text-blue-500 hover:underline"
                     onClick={handleCloseModal}
                   >

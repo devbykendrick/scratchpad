@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { API_URL } from "../../api/config";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -19,7 +19,11 @@ function QuickNotesView() {
   const [deckIdToUpdate, setDeckIdToUpdate] = useState("");
   const [deckIdToDelete, setDeckIdToDelete] = useState("");
 
-  // START Google Calendar API
+  /*
+   *
+   * START Google Calendar API
+   *
+   */
 
   const [signedIn, setSignedIn] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -45,12 +49,12 @@ function QuickNotesView() {
       setSignedIn(true);
       localStorage.setItem("signedIn", "true");
     },
-    flow: "auth-code",
+    onError: (error) => console.log("Login Failed:", error),
+    // flow: "auth-code",
   });
 
   type GroupedDecks = Record<string, TDeckProps[]>;
 
-  // Assuming 'decks' is an array of Deck objects
   const months = [
     "January",
     "February",
@@ -118,7 +122,11 @@ function QuickNotesView() {
     }
   }, []);
 
-  // END Google Calendar API
+  /*
+   *
+   * END Google Calendar API
+   *
+   */
 
   const chatEndRef = useRef<HTMLDivElement>(null); // Ref for scrolling to the bottom
 
@@ -126,17 +134,6 @@ function QuickNotesView() {
     setDeckIdToUpdate(deckId);
     setShowUpdateModal(true);
   }
-
-  // async function handleCreateDeck(e: React.FormEvent) {
-  //   e.preventDefault();
-  //   const deck = await createDeck(title);
-  //   setDecks([...decks, deck]);
-  //   setTitle("");
-
-  //   if (buttonClicked) {
-  //     setButtonClicked(true);
-  //   }
-  // }
 
   const handleCreateDeck = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,11 +198,11 @@ function QuickNotesView() {
     })();
   }, []);
 
-  useEffect(() => {
-    // Scroll to the bottom
+  useLayoutEffect(() => {
+    // Scroll to the bottom when component mounts or updates
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({
-        behavior: "smooth",
+        behavior: "auto",
         block: "end",
         inline: "nearest",
       });
@@ -511,7 +508,6 @@ function QuickNotesView() {
                       Cancel
                     </button>
                   </div>
-                  {/* <button onClick={() => signOut()}>Sign Out</button> */}
                 </form>
               )}
               {apiStatus && signedIn && (

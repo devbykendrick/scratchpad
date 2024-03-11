@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { googleLogout } from "@react-oauth/google";
 import { useEffect, useState } from "react";
 
 interface NavbarProps {
@@ -16,6 +17,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   function confirmLogout() {
     setSignedIn(false);
     localStorage.setItem("signedIn", "false");
+    googleLogout();
     setShowLogoutModal(false);
     window.location.reload();
   }
