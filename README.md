@@ -8,16 +8,16 @@ Integration with Google Calendar: Add tasks directly to your Google Calendar for
 Integration with Obsidian: Copy notes to your Obsidian note-taking app for long-term storage and organization.
 
 ## Technologies Used
-React: Frontend framework for building the user interface.
-Node.js: Backend runtime environment.
-Express: Web framework for Node.js used for building the backend.
-TypeScript: Programming language used for both frontend and backend development, providing type safety and enhanced tooling.
-MongoDB: NoSQL database used for storing user data.
-Mongoose: MongoDB object modeling tool designed to work in an asynchronous environment.
-Google Calendar API: Allows integration with Google Calendar for adding tasks.
-Obsidian API: Enables copying notes to the Obsidian app for long-term storage.
-Axios: HTTP client for making API requests.
-Tailwind CSS: Utility-first CSS framework for styling the app.
+1. React: Frontend framework for building the user interface.
+2. Node.js: Backend runtime environment.
+3. Express: Web framework for Node.js used for building the backend.
+4. TypeScript: Programming language used for both frontend and backend development, providing type safety and enhanced tooling.
+5. MongoDB: NoSQL database used for storing user data.
+6. Mongoose: MongoDB object modeling tool designed to work in an asynchronous environment.
+7. Google Calendar API: Allows integration with Google Calendar for adding tasks.
+8. Obsidian API: Enables copying notes to the Obsidian app for long-term storage.
+9. Axios: HTTP client for making API requests.
+10. Tailwind CSS: Utility-first CSS framework for styling the app.
 
 ## Installation
 Clone the repository to your local machine.
