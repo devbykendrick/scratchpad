@@ -81,8 +81,6 @@ app.post("/create-event", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(3001, () => console.log(`server is running`));
-
 mongoose.connect(process.env.MONGO_URL!).then(() => {
   app.listen(port, () => {
     console.log("Server Started");
