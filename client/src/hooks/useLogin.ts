@@ -19,6 +19,7 @@ export function useLogin() {
     };
 
     const response = await fetch(`${USER_API_URL}/api/user/login`, {
+      mode: "no-cors",
       method: "POST",
       headers: headers,
       body: JSON.stringify({ email, password }),
