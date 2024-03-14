@@ -12,8 +12,9 @@ export function useLogin() {
     setError(null);
 
     const headers = {
+      "Access-Control-Allow-Headers": "origin, Content-Type, accept",
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "https://scratchpad-frontend.vercel.app/",
       "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
     };
 
