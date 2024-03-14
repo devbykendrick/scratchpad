@@ -12,11 +12,20 @@ import { UserRefreshClient } from "google-auth-library";
 const port = process.env.PORT;
 const app = express();
 
+// app.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
+
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://scratchpad-api-three.vercel.app"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
+
 app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/message", messageRoutes);
