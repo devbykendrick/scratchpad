@@ -50,13 +50,42 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   }, []);
 
   return (
-    <nav className="bg-gray-800 text-white p-4 fixed top-0 w-full z-50">
+    <nav className="bg-black text-white p-4 fixed top-0 w-full z-50">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center">
-          <Link to="/" className="text-xl font-bold">
-            Scratch Pad
-          </Link>
-        </div>
+        <Link to="/" className="flex items-center">
+          <div className="mr-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 32 32"
+              width="60"
+              height="60"
+            >
+              <path
+                stroke="#fff"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M25.485 30.865h0v-6.811h0a4.606 4.606 0 0 1 1.108-3 12.252 12.252 0 0 0 2.929-8.607A11.921 11.921 0 0 0 18.768 1.033a11.8 11.8 0 0 0-12.513 11.5h-.013L4.053 17.87a.935.935 0 0 0 .652 1.221l2.377.546.593 6.729a.911.911 0 0 0 .894.831h4.763v3.668"
+              ></path>
+              <path
+                fill="none"
+                stroke="#fff"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 13h2"
+              ></path>
+              <path
+                fill="none"
+                stroke="#FBA3E1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m24.5 7.5-7 9M25.5 8.5l-7 9M20.5 8.5l4 4M19.5 9.5l4 4"
+              ></path>
+            </svg>
+          </div>
+          <h1 className="text-4xl font-semibold ">Scratch Pad</h1>
+        </Link>
         {/* {user && (
           <div>
             <span>{user.email}</span>

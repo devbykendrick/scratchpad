@@ -15,9 +15,42 @@ function Login() {
   return (
     <div>
       <section className="bg-black">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <h1 className="text-4xl font-bold mb-5">Scratch Pad</h1>
-          <div className="w-full rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen">
+          <div className="flex items-center mb-5">
+            <div className="mr-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                width="60"
+                height="60"
+              >
+                <path
+                  stroke="#fff"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M25.485 30.865h0v-6.811h0a4.606 4.606 0 0 1 1.108-3 12.252 12.252 0 0 0 2.929-8.607A11.921 11.921 0 0 0 18.768 1.033a11.8 11.8 0 0 0-12.513 11.5h-.013L4.053 17.87a.935.935 0 0 0 .652 1.221l2.377.546.593 6.729a.911.911 0 0 0 .894.831h4.763v3.668"
+                ></path>
+                <path
+                  fill="none"
+                  stroke="#fff"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 13h2"
+                ></path>
+                <path
+                  fill="none"
+                  stroke="#FBA3E1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m24.5 7.5-7 9M25.5 8.5l-7 9M20.5 8.5l4 4M19.5 9.5l4 4"
+                ></path>
+              </svg>
+            </div>
+            <h1 className="text-4xl font-semibold">Scratch Pad</h1>
+          </div>
+          <div className="w-full rounded-lg shadow border-2 md:mt-0 sm:max-w-md xl:p-0 bg-black border-gray-400">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
                 Sign in to your account
@@ -34,7 +67,7 @@ function Login() {
                     type="email"
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
-                    className="border sm:text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                     placeholder="name@gmail.com"
                     required
                   />
@@ -51,7 +84,7 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     placeholder="••••••••"
-                    className="border sm:text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                    className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
                 </div>

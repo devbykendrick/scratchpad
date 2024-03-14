@@ -7,6 +7,8 @@ import cors from "cors";
 import userRoutes from "./router/user";
 import messageRoutes from "./router/messages";
 
+import { UserRefreshClient } from "google-auth-library";
+
 const port = 8000;
 const app = express();
 
@@ -22,11 +24,31 @@ app.use("/api/message", messageRoutes);
 // GOOGLE CALENDAR API
 const { google } = require("googleapis");
 
+// const clientId = process.env.GOOGLE_CLIENT_ID;
+// const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
   "postmessage"
 );
+
+// app.post("/auth/google", async (req: Request, res: Response) => {
+//   const { tokens } = await oauth2Client.getToken(req.body.code); // exchange code for tokens
+//   console.log(tokens);
+
+//   res.json(tokens);
+// });
+
+// app.post("/auth/google/refresh-token", async (req, res) => {
+//   const user = new UserRefreshClient(
+//     clientId,
+//     clientSecret,
+//     req.body.refreshToken
+//   );
+//   const { credentials } = await user.refreshAccessToken(); // optain new tokens
+//   res.json(credentials);
+// });
 
 app.post("/create-event", async (req: Request, res: Response) => {
   try {

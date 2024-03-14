@@ -102,6 +102,11 @@ function QuickNotesView() {
         endDateTime,
       })
       .then((response) => {
+        setSummary("");
+        setDescription("");
+        setLocation("");
+        setStartDateTime("");
+        setEndDateTime("");
         console.log(response.data);
         setApiStatus({ success: true, message: "Event created successfully" });
       })
@@ -109,11 +114,6 @@ function QuickNotesView() {
         console.log(error.message);
         setApiStatus({ success: false, message: "Failed to create event" });
       });
-    setSummary("");
-    setDescription("");
-    setLocation("");
-    setStartDateTime("");
-    setEndDateTime("");
   }
 
   useEffect(() => {
@@ -273,7 +273,7 @@ function QuickNotesView() {
     <>
       <Navbar signedIn={signedIn} setSignedIn={setSignedIn} />
       <main>
-        <div className="px-4 my-14 overflow-y-auto">
+        <div className="px-4 my-20 overflow-y-auto">
           {Object.entries(groupedDecks).map(([date, decks]) => (
             <div key={date}>
               <div className="text-gray-400 text-center mt-3 mb-2">{date}</div>
@@ -369,14 +369,14 @@ function QuickNotesView() {
             <div className="bg-black rounded-lg p-8 w-full menu">
               <h2 className="text-2xl font-bold mb-4">Update Message</h2>
               <textarea
-                className="bg-black border border-gray-600 rounded w-full p-2 mb-4"
+                className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 mb-5"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 required
               />
               <div className="flex justify-end">
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+                  className="bg-blue-600 text-white px-4 py-2 mr-2 rounded"
                   onClick={() => saveUpdatedTitle()}
                 >
                   Save
@@ -460,7 +460,7 @@ function QuickNotesView() {
                       Title <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="bg-black border border-gray-600 rounded p-2"
+                      className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       type="text"
                       id="summary"
                       onChange={(e) => setSummary(e.target.value)}
@@ -473,7 +473,7 @@ function QuickNotesView() {
                       Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
-                      className="bg-black border border-gray-600 rounded p-2"
+                      className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       id="description"
                       onChange={(e) => setDescription(e.target.value)}
                       value={description}
@@ -485,7 +485,7 @@ function QuickNotesView() {
                       Location
                     </label>
                     <input
-                      className="bg-black border border-gray-600 rounded p-2"
+                      className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       type="text"
                       id="location"
                       onChange={(e) => setLocation(e.target.value)}
@@ -497,7 +497,7 @@ function QuickNotesView() {
                       Start Date Time <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="bg-black border border-gray-600 rounded p-2"
+                      className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       type="datetime-local"
                       id="startDateTime"
                       onChange={(e) => setStartDateTime(e.target.value)}
@@ -510,7 +510,7 @@ function QuickNotesView() {
                       End Date Time <span className="text-red-500">*</span>
                     </label>
                     <input
-                      className="bg-black border border-gray-600 rounded p-2"
+                      className="border sm:text-sm rounded-lg block w-full p-2.5 bg-[#0a0a0f] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                       type="datetime-local"
                       id="endDateTime"
                       onChange={(e) => setEndDateTime(e.target.value)}
@@ -523,7 +523,7 @@ function QuickNotesView() {
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="bg-blue-500 text-white px-4 py-2 mr-2 rounded"
+                      className="bg-blue-600 text-white px-4 py-2 mr-2 rounded"
                     >
                       Create Calendar Event
                     </button>
