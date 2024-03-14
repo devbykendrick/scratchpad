@@ -12,7 +12,6 @@ export function createDeckController(req: Request, res: Response) {
         header: req.body.header,
         user_id: user_id,
       });
-      console.log(user_id);
 
       const createdDeck = await newDeck.save();
       res.json(createdDeck);

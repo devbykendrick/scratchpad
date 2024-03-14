@@ -9,7 +9,7 @@ import messageRoutes from "./router/messages";
 
 import { UserRefreshClient } from "google-auth-library";
 
-const port = 8000;
+const port = process.env.PORT;
 const app = express();
 
 app.use(
