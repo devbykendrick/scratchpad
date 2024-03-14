@@ -11,9 +11,15 @@ export function useLogin() {
     setIsLoading(true);
     setError(null);
 
+    const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
+    };
+
     const response = await fetch(`${USER_API_URL}/api/user/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify({ email, password }),
     });
 
