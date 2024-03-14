@@ -21,7 +21,7 @@ const app = express();
 app.use(
   cors({
     origin: ["https://scratchpad-frontend.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
