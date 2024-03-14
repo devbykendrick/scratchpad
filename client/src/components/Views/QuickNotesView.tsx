@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { API_URL } from "../../api/config";
+import { GOOGLE_API_URL } from "../../api/config";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { deleteDeck } from "../../api/deleteDeck";
@@ -8,6 +8,7 @@ import { createDeck } from "../../api/createDeck";
 import { updateDeck } from "../../api/updateDeck";
 import DropdownMenu from "../DropdownMenu";
 import Navbar from "../Navbar/Navbar";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function QuickNotesView() {
   const [decks, setDecks] = useState<TDeckProps[]>([]);
@@ -18,6 +19,8 @@ function QuickNotesView() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deckIdToUpdate, setDeckIdToUpdate] = useState("");
   const [deckIdToDelete, setDeckIdToDelete] = useState("");
+
+  const { user } = useAuthContext();
 
   /*
    *
@@ -91,7 +94,7 @@ function QuickNotesView() {
     e.preventDefault();
 
     axios
-      .post(`${API_URL}/create-event`, {
+      .post(`${GOOGLE_API_URL}/create-event`, {
         summary,
         description,
         location,
@@ -137,6 +140,11 @@ function QuickNotesView() {
 
   const handleCreateDeck = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      throw new Error("You must be logged in");
+    }
+
     try {
       const deckTitle = title.trim();
       if (deckTitle === "") return;
@@ -145,7 +153,8 @@ function QuickNotesView() {
         buttonClicked
           ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
           : "bg-[#217DF7]",
-        buttonClicked ? "TASK" : "NOTES"
+        buttonClicked ? "TASK" : "NOTES",
+        user.token
       ); // Pass color to createDeck
       const newDeck: TDeckProps = {
         title: createdDeck.title,
@@ -169,8 +178,12 @@ function QuickNotesView() {
   }
 
   async function handleDeleteDeck() {
+    if (!user) {
+      throw new Error("You must be logged in");
+    }
+
     if (deckIdToDelete) {
-      await deleteDeck(deckIdToDelete);
+      await deleteDeck(deckIdToDelete, user.token);
       setDecks(decks.filter((deck) => deck._id !== deckIdToDelete));
     }
     setShowDeleteModal(false);
@@ -178,8 +191,12 @@ function QuickNotesView() {
   }
 
   async function saveUpdatedTitle() {
+    if (!user) {
+      throw new Error("You must be logged in");
+    }
+
     if (deckIdToUpdate) {
-      await updateDeck(deckIdToUpdate, newTitle);
+      await updateDeck(deckIdToUpdate, newTitle, user.token);
       setDecks(
         decks.map((deck) =>
           deck._id === deckIdToUpdate ? { ...deck, title: newTitle } : deck
@@ -192,11 +209,19 @@ function QuickNotesView() {
   }
 
   useEffect(() => {
-    (async () => {
-      const newDecks = await getDecks();
-      setDecks(newDecks);
-    })();
-  }, []);
+    async function fetchDecks() {
+      try {
+        if (user) {
+          const newDecks = await getDecks(user.token);
+          setDecks(newDecks);
+        }
+      } catch (error) {
+        console.error("Error fetching decks:", error);
+      }
+    }
+
+    fetchDecks();
+  }, [user]);
 
   useLayoutEffect(() => {
     // Scroll to the bottom when component mounts or updates
@@ -306,34 +331,37 @@ function QuickNotesView() {
               ></path>
             </svg>
           </button>
-          <input
-            id="deck-title"
-            className="bg-black bg-opacity-0 backdrop-blur-sm border border-gray-600 rounded-full py-2 px-4 w-full focus:outline-none text-white h-10"
-            value={title}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setTitle(e.target.value);
-            }}
-            required
-          />
-          <button
-            onClick={() => {
-              setButtonClicked(false);
-            }}
-            className="bg-[#217DF7] rounded-full absolute inset-y-0 px-1 right-4 mt-4 h-8"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 512 512"
-              id="up-arrow"
+          <div className="flex items-center border border-gray-600 bg-black bg-opacity-0 backdrop-blur-sm rounded-full overflow-hidden w-full">
+            <input
+              value={title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setTitle(e.target.value);
+              }}
+              required
+              id="deck-title"
+              type="text"
+              className="flex-1 px-4 py-2 bg-black bg-opacity-0 backdrop-blur-sm focus:outline-none"
+            />
+            <button
+              onClick={() => {
+                setButtonClicked(false);
+              }}
+              className="px-1 py-1 mr-1 focus:outline-none bg-[#217DF7] rounded-full"
             >
-              <path
-                fill="white"
-                d="M128.4 189.3L233.4 89c5.8-6 13.7-9 22.4-9s16.5 3 22.4 9l105.4 100.3c12.5 11.9 12.5 31.3 0 43.2-12.5 11.9-32.7 11.9-45.2 0L288 184.4v217c0 16.9-14.3 30.6-32 30.6s-32-13.7-32-30.6v-217l-50.4 48.2c-12.5 11.9-32.7 11.9-45.2 0-12.5-12-12.5-31.3 0-43.3z"
-              ></path>
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 512 512"
+                id="up-arrow"
+              >
+                <path
+                  fill="white"
+                  d="M128.4 189.3L233.4 89c5.8-6 13.7-9 22.4-9s16.5 3 22.4 9l105.4 100.3c12.5 11.9 12.5 31.3 0 43.2-12.5 11.9-32.7 11.9-45.2 0L288 184.4v217c0 16.9-14.3 30.6-32 30.6s-32-13.7-32-30.6v-217l-50.4 48.2c-12.5 11.9-32.7 11.9-45.2 0-12.5-12-12.5-31.3 0-43.3z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </form>
         <div ref={chatEndRef}></div> {/* Scroll target */}
         {showUpdateModal && (

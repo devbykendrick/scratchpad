@@ -1,6 +1,11 @@
 import { API_URL } from "./config";
 
-export async function createDeck(title: string, color: string, header: string) {
+export async function createDeck(
+  title: string,
+  color: string,
+  header: string,
+  token: string
+) {
   const response = await fetch(`${API_URL}/decks`, {
     method: "POST",
     body: JSON.stringify({
@@ -10,6 +15,7 @@ export async function createDeck(title: string, color: string, header: string) {
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.json();

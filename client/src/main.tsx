@@ -1,21 +1,18 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createRoot } from "react-dom/client";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import QuickNotesView from "./components/Views/QuickNotesView.tsx";
+import { AuthContextProvider } from "./context/AuthContext";
+import App from "./app";
 import "./index.css";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <QuickNotesView />,
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}>
-      <RouterProvider router={router} />
-    </GoogleOAuthProvider>
+    <AuthContextProvider>
+      <GoogleOAuthProvider
+        clientId={`${import.meta.env.VITE_GOOGLE_CLIENT_ID}`}
+      >
+        <App />
+      </GoogleOAuthProvider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

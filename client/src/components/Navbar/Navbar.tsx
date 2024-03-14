@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { googleLogout } from "@react-oauth/google";
 import { useEffect, useState } from "react";
+import { useLogout } from "../../hooks/useLogout";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 interface NavbarProps {
   signedIn: boolean;
@@ -9,6 +11,12 @@ interface NavbarProps {
 
 function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const { logout } = useLogout();
+  const { user } = useAuthContext();
+
+  // function handleClick() {
+  //   logout();
+  // }
 
   function handleLogout() {
     setShowLogoutModal(true);
@@ -18,6 +26,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
     setSignedIn(false);
     localStorage.setItem("signedIn", "false");
     googleLogout();
+    logout();
     setShowLogoutModal(false);
     window.location.reload();
   }
@@ -48,6 +57,22 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
             Scratch Pad
           </Link>
         </div>
+        {/* {user && (
+          <div>
+            <span>{user.email}</span>
+            <button onClick={handleClick}>Log Out</button>
+          </div>
+        )} */}
+        {!user && (
+          <div>
+            <Link to="/login" className="text-xl font-bold">
+              Login
+            </Link>
+            {/* <Link to="/signup" className="text-xl font-bold">
+              Signup
+            </Link> */}
+          </div>
+        )}
         {signedIn && (
           <>
             <button
