@@ -419,10 +419,8 @@ function QuickNotesView() {
               {!apiStatus && !signedIn && (
                 <div className="flex flex-col justify-center">
                   <div className="mb-5 text-center">
-                    <h2 className="text-3xl font-bold mb-2">Log in</h2>
-                    <p className="">
-                      Click the button below to connect your Google Calendar!
-                    </p>
+                    <h2 className="text-3xl font-bold mb-2">Google Calendar</h2>
+                    <p className="">Sign in below to grant access</p>
                   </div>
                   <div onClick={() => login()} className="flex justify-center">
                     <div className="bg-white rounded-full p-4">
