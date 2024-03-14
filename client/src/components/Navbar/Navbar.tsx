@@ -96,7 +96,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
                 <div className="bg-black text-white p-8 rounded-lg mx-4 menu">
                   <p className="text-lg font-semibold">
-                    Are you sure you want to logout of your Google account?
+                    Are you sure you want to logout of Scratch Pad?
                   </p>
                   <div className="mt-4 flex justify-end">
                     <button
