@@ -50,7 +50,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   }, []);
 
   return (
-    <nav className="bg-black text-white p-4 fixed top-0 w-full z-50">
+    <nav className="bg-black text-white p-4 fixed top-0 w-full z-80">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <div className="mr-3">

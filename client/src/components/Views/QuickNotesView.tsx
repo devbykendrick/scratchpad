@@ -306,7 +306,7 @@ function QuickNotesView() {
         </div>
         <form
           onSubmit={handleCreateDeck}
-          className="flex fixed bottom-0 left-0 right-0 bg-black bg-opacity-70 backdrop-blur-md p-3"
+          className="flex fixed bottom-0 left-0 right-0 bg-black bg-opacity-70 backdrop-blur-md p-3 z-80"
         >
           <button
             onClick={() => {
