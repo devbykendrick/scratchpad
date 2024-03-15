@@ -51,6 +51,11 @@ function AppWithGoogleAuth() {
           </GoogleOAuthProvider>
         </AuthContextProvider>
       )}
+      {!googleClientId && (
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
+      )}
     </React.StrictMode>
   );
 }
