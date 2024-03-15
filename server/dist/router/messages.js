@@ -21,6 +21,10 @@ const requireAuth_1 = __importDefault(require("../middleware/requireAuth"));
 const router = express_1.default.Router();
 // Require Auth for all deck routes
 router.use(requireAuth_1.default);
+router.get("/google-client-id", (req, res) => {
+    const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    res.json({ googleClientId });
+});
 router.get("/decks", getDecksController_1.getDecksController);
 router.post("/decks", createDeckController_1.createDeckController);
 router.put("/decks/:deckId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
