@@ -22,3 +22,4 @@ function deleteDeckController(req, res) {
     });
 }
 exports.deleteDeckController = deleteDeckController;
+//# sourceMappingURL=deleteDeckController.js.map

@@ -32,3 +32,4 @@ function getDecksController(req, res) {
     });
 }
 exports.getDecksController = getDecksController;
+//# sourceMappingURL=getDecksController.js.map

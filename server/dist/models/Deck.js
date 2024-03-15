@@ -47,3 +47,4 @@ const DeckSchema = new mongoose_1.Schema({
 }, { timestamps: true });
 const DeckModel = mongoose_1.default.model("Deck", DeckSchema);
 exports.default = DeckModel;
+//# sourceMappingURL=Deck.js.map

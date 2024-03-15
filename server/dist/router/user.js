@@ -11,3 +11,4 @@ router.post("/login", userController_1.loginUser);
 // Signup Route
 router.post("/signup", userController_1.signupUser);
 exports.default = router;
+//# sourceMappingURL=user.js.map

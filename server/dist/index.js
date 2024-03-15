@@ -32,6 +32,7 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 app.use(express_1.default.json());
+app.get("/", (req, res) => res.send("Express on Vercel"));
 app.use("/api/user", user_1.default);
 app.use("/api/message", messages_1.default);
 // GOOGLE CALENDAR API
@@ -88,3 +89,4 @@ mongoose_1.default.connect(process.env.MONGO_URL).then(() => {
         console.log("Server Started");
     });
 });
+//# sourceMappingURL=index.js.map

@@ -94,3 +94,4 @@ userSchema.statics.login = function (email, password) {
 // Create and export the User model
 const User = mongoose_1.default.model("User", userSchema);
 exports.default = User;
+//# sourceMappingURL=userModel.js.map

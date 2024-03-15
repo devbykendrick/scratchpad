@@ -38,3 +38,4 @@ function requireAuth(req, res, next) {
     });
 }
 exports.default = requireAuth;
+//# sourceMappingURL=requireAuth.js.map

@@ -40,3 +40,4 @@ router.put("/decks/:deckId", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.delete("/decks/:deckId", deleteDeckController_1.deleteDeckController);
 exports.default = router;
+//# sourceMappingURL=messages.js.map

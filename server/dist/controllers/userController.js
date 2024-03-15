@@ -62,3 +62,4 @@ function signupUser(req, res) {
     });
 }
 exports.signupUser = signupUser;
+//# sourceMappingURL=userController.js.map
