@@ -57,8 +57,8 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 32 32"
-              width="60"
-              height="60"
+              width="40"
+              height="40"
             >
               <path
                 stroke="#fff"
@@ -84,7 +84,7 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
               ></path>
             </svg>
           </div>
-          <h1 className="text-4xl font-semibold ">Scratch Pad</h1>
+          <h1 className="text-2xl font-semibold ">Scratch Pad</h1>
         </Link>
         {user && (
           <div>
