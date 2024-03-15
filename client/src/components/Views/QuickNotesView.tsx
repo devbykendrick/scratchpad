@@ -53,6 +53,14 @@ function QuickNotesView() {
       localStorage.setItem("signedIn", "true");
     },
     onError: (error) => console.log("Login Failed:", error),
+    flow: "auth-code",
+    // onSuccess: async ({ code }) => {
+    //   const tokens = await axios.post("http://localhost:8000/auth/google", {
+    //     code,
+    //   });
+
+    //   console.log(tokens);
+    // },
     // flow: "auth-code",
   });
 
