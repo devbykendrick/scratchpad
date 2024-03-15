@@ -53,7 +53,9 @@ function AppWithGoogleAuth() {
       )}
       {!googleClientId && (
         <AuthContextProvider>
-          <App />
+          <GoogleOAuthProvider clientId={`${import.meta.env.GOOGLE_CLIENT_ID}`}>
+            <App />
+          </GoogleOAuthProvider>
         </AuthContextProvider>
       )}
     </React.StrictMode>
