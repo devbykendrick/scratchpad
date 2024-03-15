@@ -12,6 +12,9 @@ router.use(requireAuth);
 
 router.get("/google-client-id", (req: Request, res: Response) => {
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
+  if (!googleClientId) {
+    return res.status(500).json({ error: "Google Client ID not found" });
+  }
   res.json({ googleClientId });
 });
 

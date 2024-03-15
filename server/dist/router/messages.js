@@ -23,6 +23,9 @@ const router = express_1.default.Router();
 router.use(requireAuth_1.default);
 router.get("/google-client-id", (req, res) => {
     const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+        return res.status(500).json({ error: "Google Client ID not found" });
+    }
     res.json({ googleClientId });
 });
 router.get("/decks", getDecksController_1.getDecksController);

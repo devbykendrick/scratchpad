@@ -28,29 +28,29 @@ function AppWithGoogleAuth() {
 
   useEffect(() => {
     fetch(`${API_URL}/google-client-id`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch Google Client ID");
+        }
+        return response.json();
+      })
       .then((data) => {
         setGoogleClientId(data.googleClientId);
       })
-      .catch((error) =>
-        console.error("Error fetching Google Client ID:", error)
-      );
+      .catch((error) => {
+        console.error("Error fetching Google Client ID:", error);
+      });
   }, []);
 
   return (
     <React.StrictMode>
-      <AuthContextProvider>
-        {googleClientId && (
+      {googleClientId && (
+        <AuthContextProvider>
           <GoogleOAuthProvider clientId={googleClientId}>
             <App />
           </GoogleOAuthProvider>
-        )}
-        {!googleClientId && (
-          <GoogleOAuthProvider clientId={`${import.meta.env.GOOGLE_CLIENT_ID}`}>
-            <App />
-          </GoogleOAuthProvider>
-        )}
-      </AuthContextProvider>
+        </AuthContextProvider>
+      )}
     </React.StrictMode>
   );
 }
