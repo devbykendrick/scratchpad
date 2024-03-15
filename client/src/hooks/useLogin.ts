@@ -11,16 +11,16 @@ export function useLogin() {
     setIsLoading(true);
     setError(null);
 
-    // const headers = {
-    //   "Access-Control-Allow-Origin": "https://scratchpad-frontend.vercel.app",
-    //   "Access-Control-Allow-Headers": "origin, Content-Type, accept",
-    //   "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
-    //   "Content-Type": "application/json",
-    // };
+    const headers = {
+      "Access-Control-Allow-Origin": "https://scratchpad-frontend.vercel.app",
+      "Access-Control-Allow-Headers": "origin, Content-Type, accept",
+      "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
+      "Content-Type": "application/json",
+    };
 
-    const response = await fetch(`${USER_API_URL}/api/user/login`, {
+    const response = await fetch(`${USER_API_URL}/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify({ email, password }),
     });
 
