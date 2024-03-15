@@ -5,6 +5,8 @@ import { AuthContextProvider } from "./context/AuthContext";
 import App from "./app";
 import "./index.css";
 
+const GOOGLE_CLIENT_ID = "";
+
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthContextProvider>
