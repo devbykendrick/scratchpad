@@ -14,9 +14,9 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
   const { logout } = useLogout();
   const { user } = useAuthContext();
 
-  // function handleClick() {
-  //   logout();
-  // }
+  function handleClick() {
+    logout();
+  }
 
   function handleLogout() {
     setShowLogoutModal(true);
@@ -86,12 +86,11 @@ function Navbar({ signedIn, setSignedIn }: NavbarProps) {
           </div>
           <h1 className="text-4xl font-semibold ">Scratch Pad</h1>
         </Link>
-        {/* {user && (
+        {user && (
           <div>
-            <span>{user.email}</span>
             <button onClick={handleClick}>Log Out</button>
           </div>
-        )} */}
+        )}
         {!user && (
           <div>
             <Link to="/login" className="text-xl font-bold">
