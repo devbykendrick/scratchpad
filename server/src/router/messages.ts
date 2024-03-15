@@ -10,7 +10,7 @@ const router = express.Router();
 // Require Auth for all deck routes
 router.use(requireAuth);
 
-router.get("/google-client-id", (req, res) => {
+router.get("/google-client-id", (req: Request, res: Response) => {
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
   res.json({ googleClientId });
 });
