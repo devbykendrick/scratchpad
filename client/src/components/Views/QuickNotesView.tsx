@@ -54,6 +54,12 @@ function QuickNotesView() {
     },
     onError: (error) => console.log("Login Failed:", error),
     flow: "auth-code",
+    // scope: [
+    //   "openid",
+    //   "https://www.googleapis.com/auth/userinfo.profile",
+    //   "https://www.googleapis.com/auth/userinfo.email",
+    //   "https://www.googleapis.com/auth/calendar",
+    // ].join(" "),
     // onSuccess: async ({ code }) => {
     //   const tokens = await axios.post("http://localhost:8000/auth/google", {
     //     code,
