@@ -8,7 +8,7 @@ import "./index.css";
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthContextProvider>
-      <GoogleOAuthProvider clientId={`${import.meta.env.VITE_ENV}`}>
+      <GoogleOAuthProvider clientId={`${import.meta.env.VITE_VERCEL_ENV}`}>
         <App />
       </GoogleOAuthProvider>
     </AuthContextProvider>
